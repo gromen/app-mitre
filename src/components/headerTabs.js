@@ -4,13 +4,27 @@ import { useEffect, useState } from 'react';
 import CustomizedFormControlLabel from './ui/CustomizedFormControlLabel';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import CustomizedTab from './ui/CustomizedTab';
-import data from '../api/mitre.json';
 
 function HeaderTabs() {
   const [categories, setCategories] = useState([]);
   const [value, setValue] = useState(0);
+
+  const getCategories = () => {
+    fetch('./api/mitre.json', {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then(({ categories }) => {
+        setCategories(categories);
+      })
+      .catch((error) => console.error(error));
+  };
+
   useEffect(() => {
-    setCategories(data.categories);
+    getCategories();
   }, [categories]);
 
   const onChangeTab = (event, newIndex) => {
